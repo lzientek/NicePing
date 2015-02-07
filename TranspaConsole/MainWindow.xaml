@@ -1,0 +1,32 @@
+﻿<Window x:Class="TranspaConsole.MainWindow"
+        Topmost="True"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" 
+        Height="{Binding Path=Options.Height,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+        Width="{Binding Options.Width,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+        AllowsTransparency="True"
+        ShowInTaskbar="False"
+        ResizeMode="CanResizeWithGrip"
+        Closed="MainWindow_OnClosed"
+        WindowStyle="None" Background="{Binding Options.BgBrush}"
+        Top="{Binding Path=Options.Top,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+        Left="{Binding Path=Options.Left,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+        >
+    <Grid MouseLeftButtonDown="Deplacement_OnMouseLeftButtonDown">
+        <Grid.ContextMenu>
+            <ContextMenu >
+                <MenuItem Click="Close_Click" Header="Close"/>
+
+            </ContextMenu>
+        </Grid.ContextMenu>
+        <ScrollViewer Margin="7" 
+                      HorizontalScrollBarVisibility="Hidden" 
+                      VerticalScrollBarVisibility="Hidden" SizeChanged="ScrollViewer_SizeChanged">
+            <ItemsControl  MouseLeftButtonDown="Deplacement_OnMouseLeftButtonDown" Name="result" 
+                           Foreground="{Binding Options.FrBrush}">
+                
+            </ItemsControl>
+        </ScrollViewer>  
+    </Grid>
+</Window>

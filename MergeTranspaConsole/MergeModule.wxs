@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Module Id="MergeTranspaConsole" Language="1033" Version="1.0.0.0">
+		<Package Id="6ca67fd5-bc41-45c0-8de5-0ed9e89b75f8" Manufacturer="" InstallerVersion="200" />
+
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="MergeRedirectFolder">
+
+				<!-- TODO: Remove the comments around this Component element in order to add resources to this module. -->
+				<!-- <Component Id="ModuleComponent" Guid="61b2b877-c3ab-4900-8e63-c4496ee19cf6"> -->
+                          <File Source="$(var.TranspaConsole.TargetPath)" />
+				<!-- </Component> -->
+
+			</Directory>
+		</Directory>
+	</Module>
+</Wix>
