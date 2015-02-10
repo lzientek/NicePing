@@ -49,7 +49,7 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <ProgressBar Orientation="Vertical" BorderThickness="0" 
-                                 Maximum="{Binding RelativeSource={RelativeSource Mode=TemplatedParent},Path=DataContext.GraphVM.MaxValue}" Minimum="0"
+                                 Maximum="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorLevel=1,AncestorType=Window},Path=DataContext.GraphVM.MaxValue}" Minimum="0"
                                  Value="{Binding Path=.}" Background="#00000000" 
                                  MinWidth="1"
                                  Margin="0"

@@ -7,7 +7,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Xml.Serialization;
-using Microsoft.Win32;
 
 namespace TranspaConsole
 {
@@ -16,17 +15,20 @@ namespace TranspaConsole
     /// </summary>
     public partial class MainWindow : Window
     {
-        ExecuteCmd _cmd = new ExecuteCmd();
+        private ExecuteCmd _cmd = new ExecuteCmd();
         private StreamReader outPut;
+        public const int MaxValues = 50;
+        
         public ObservableCollection<string> ConsoleResult { get; set; }
         public GraphViewModel GraphVM { get; set; }
         public Options Options { get; set; }
-        public const int MaxValues = 50;
+        
+        
         public MainWindow()
         {
             ConsoleResult = new ObservableCollection<string>();
             Options = new Options();
-            GraphVM = new GraphViewModel();
+            GraphVM = new GraphViewModel(){MaxValue = 50};
             LoadOptions();
 
             InitializeComponent();
@@ -54,7 +56,7 @@ namespace TranspaConsole
             Options.BgColor = new Color() { ScA = 0.5f, B = 0, R = 0, G = 0 };
             Options.FrColor = Colors.White;
             Options.Height = 200;
-            Options.Width = 320;
+            Options.Width = 350;
             Options.Top = 200;
             Options.Left = 200;
             Options.Ip = "8.8.8.8";
@@ -86,8 +88,8 @@ namespace TranspaConsole
 
         }
 
-
-        public static readonly Regex TimeRegex = new Regex(@"time=([0-9]+)");
+        //on chop le nombre après le deuxieme egal!
+        public static readonly Regex TimeRegex = new Regex(@".+=.+=([0-9]+).+=[0-9]+");
 
         private int IsSuccessTime(string val)
         {
