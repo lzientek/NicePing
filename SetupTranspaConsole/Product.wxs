@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="*" Name="TranspaConsole" Language="1033" Version="1.0.0.0" Manufacturer="Lucas Zientek" UpgradeCode="0323b6b6-3baa-4755-b678-c6cf1bfc45fc">
+  <Product Id="*" Name="NicePing" Language="1033" Version="1.0.0.0" Manufacturer="Lucas Zientek" UpgradeCode="0323b6b6-3baa-4755-b678-c6cf1bfc45fc">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
     <MediaTemplate />
 
-    <Feature Id="ProductFeature" Title="TranspaConsole" Level="1">
+    <Feature Id="ProductFeature" Title="NicePing" Level="1">
       <ComponentGroupRef Id="ProductComponents" />
     </Feature>
   </Product>
@@ -14,7 +14,7 @@
   <Fragment>
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
-        <Directory Id="INSTALLFOLDER" Name="TranspaConsole" />
+        <Directory Id="INSTALLFOLDER" Name="NicePing" />
       </Directory>
     </Directory>
   </Fragment>
@@ -23,7 +23,11 @@
     <ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
       <Component Id="ProductComponent">
         <File Source="$(var.TranspaConsole.TargetPath)" />
-
+        <RegistryValue Id="MerAs.rst" Root="HKMU" Action="write"
+                   Key="Software\Microsoft\Windows\CurrentVersion\Run"
+                   Name="[ProductName]"
+                   Value="[INSTALLDIR]NicePing.exe"
+                   Type="string" />
       </Component>
     </ComponentGroup>
   </Fragment>

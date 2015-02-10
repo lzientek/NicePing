@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Xml.Serialization;
+using Microsoft.Win32;
 
 namespace TranspaConsole
 {
@@ -17,13 +19,14 @@ namespace TranspaConsole
         ExecuteCmd _cmd = new ExecuteCmd();
         private StreamReader outPut;
         public ObservableCollection<string> ConsoleResult { get; set; }
-
+        public GraphViewModel GraphVM { get; set; }
         public Options Options { get; set; }
-        private const int MaxValues = 50;
+        public const int MaxValues = 50;
         public MainWindow()
         {
             ConsoleResult = new ObservableCollection<string>();
             Options = new Options();
+            GraphVM = new GraphViewModel();
             LoadOptions();
 
             InitializeComponent();
@@ -39,13 +42,13 @@ namespace TranspaConsole
                 XmlSerializer xs = new XmlSerializer(typeof(Options));
                 using (StreamReader rd = new StreamReader("option.xml"))
                 {
-                     Options = xs.Deserialize(rd) as Options;
-                     if (Options != null) { return;}
+                    Options = xs.Deserialize(rd) as Options;
+                    if (Options != null) { return; }
                 }
             }
             catch (Exception)
             {
-                
+
             }
             Options = new Options();
             Options.BgColor = new Color() { ScA = 0.5f, B = 0, R = 0, G = 0 };
@@ -65,12 +68,37 @@ namespace TranspaConsole
             {
                 val = await outPut.ReadLineAsync();
                 ConsoleResult.Add(val);
+
+                //mis a jour du graph
+                int suc = IsSuccessTime(val);
+                GraphVM.Values.Add(suc);
+                if (GraphVM.Values.Count > MainWindow.MaxValues)
+                {
+                    GraphVM.Values.RemoveAt(0);
+                }
+
+                //mis a jour de l'affichage
                 if (ConsoleResult.Count >= MaxValues)
                 {
                     ConsoleResult.RemoveAt(0);
                 }
             } while (true);
 
+        }
+
+
+        public static readonly Regex TimeRegex = new Regex(@"time=([0-9]+)");
+
+        private int IsSuccessTime(string val)
+        {
+            var m = TimeRegex.Match(val);
+            if (m.Success)
+            {
+                int t;
+                int.TryParse(m.Groups[1].Value, out t);
+                return t;
+            }
+            return -1;
         }
 
         private void ScrollViewer_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -88,8 +116,15 @@ namespace TranspaConsole
             base.OnMouseLeftButtonDown(e);
 
             // deplace la fenetre
-            DragMove();
+            try
+            {
+                DragMove();
+            }
+            catch (Exception )
+            {
+            }
         }
+
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {
